@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import httpx
 
-from main import BuildTarget, DependencySpec, PackageMetadata
+from models import BuildTarget, DependencySpec, PackageMetadata
 
 BASE_URL = "https://packages.ecosyste.ms/api/v1"
 LATEST_VERSION_URL = f"{BASE_URL}/registries/{{provider}}/packages/{{name}}/latest_version"
@@ -22,7 +22,8 @@ def fetch_package_metadata(target: BuildTarget) -> PackageMetadata:
         name=target.name,
         version=pkg.number,
         dependencies=tuple(
-            DependencySpec(name=d.package_name, requirement=d.requirements)
+            # normalize package names to lowercase to avoid inconsistencies
+            DependencySpec(name=d.package_name.lower(), requirement=d.requirements)
             for d in pkg.dependencies
             if not d.optional and d.kind == "runtime"
        ),
