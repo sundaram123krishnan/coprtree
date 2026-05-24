@@ -16,7 +16,7 @@ def fetch_package_metadata(target: BuildTarget) -> PackageMetadata:
         if target.version
         else LATEST_VERSION_URL.format(provider=target.provider, name=target.name)
     )
-    pkg = httpx.get(url).json(object_hook=lambda d: SimpleNamespace(**d))
+    pkg = httpx.get(url, timeout=120).json(object_hook=lambda d: SimpleNamespace(**d))
     return PackageMetadata(
         provider=target.provider,
         name=target.name,
