@@ -1,5 +1,5 @@
 from metadata import fetch_package_metadata
-from dependency_graph import DependencyGraph, build_graph, resolve_graph
+from dependency_graph import PackageNode, build_graph, resolve_graph
 from models import BuildTarget
 
 
@@ -12,7 +12,7 @@ class Coprtree:
         self.copr_project = copr_project
         self.chroot = chroot # later have options to add multipe chroots, for now keep only one
 
-    def to_build(self) -> DependencyGraph:
+    def to_build(self) -> list[list[PackageNode]]:
         return resolve_graph(self.graph, self.chroot, self.copr_project)
 
 
@@ -20,8 +20,8 @@ if __name__ == "__main__":
     coprtree = Coprtree(
         BuildTarget(provider="pypi.org", name="pydantic-ai"),
         copr_project=None,
-        chroot="fedora-rawhide-x86_64",
+        chroot="fedora-44-x86_64",
     )
-    print("full graph:", coprtree.graph._edges)
-    print()
-    print("to build:  ", coprtree.to_build()._edges)
+    # This is the topo-sorted pruned graph, so the siblings nodes of each levels can be built in parallel
+    for i, level in enumerate(coprtree.to_build()):
+        print(f"level {i}: {[n.name for n in level]}")
