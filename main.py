@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from dependency_graph import DependencyGraph, build_graph, resolve_graph
+from api import fetch_package_metadata
 
 
 @dataclass(frozen=True)
@@ -27,7 +28,6 @@ class PackageMetadata:
 
 class Coprtree:
     def __init__(self, target: BuildTarget):
-        from api import fetch_package_metadata  # lazy: break main<->api circular import
         self.target = target
         self.metadata = fetch_package_metadata(target)
         # this would contain the full dependency graph, including nodes that fedora and copr repositories already provides
