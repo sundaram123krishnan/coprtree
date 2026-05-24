@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from api import fetch_package_metadata
+from availability import has_package_in_repository
+from metadata import fetch_package_metadata
 from models import BuildTarget, PackageMetadata
 
 
@@ -13,7 +14,7 @@ class PackageNode:
 
 class DependencyGraph:
     def __init__(self, target):
-        self.target = target # root of the graph 
+        self.target = target # root of the graph
         self._edges = {target: set()}
 
 
@@ -49,6 +50,29 @@ def build_graph(root: PackageMetadata) -> DependencyGraph:
     return graph
 
 
-def resolve_graph(graph: DependencyGraph) -> DependencyGraph:
-    pass 
+def resolve_graph(graph: DependencyGraph, chroot: str, project: str | None = None) -> DependencyGraph:
+    keep = _nodes_to_keep(graph, chroot, project)
+    return _subgraph(graph, keep)
 
+
+def _nodes_to_keep(graph: DependencyGraph, chroot: str, project: str | None) -> set[PackageNode]:
+    keep = {graph.target}
+    for node in graph._edges:
+        if node == graph.target:
+            continue
+        if not has_package_in_repository(node.name, chroot, project):
+            keep.add(node)
+    return keep
+
+
+def _subgraph(graph: DependencyGraph, keep: set[PackageNode]) -> DependencyGraph:
+    pruned = DependencyGraph(graph.target)
+    for node in keep:
+        pruned.add_node(node)
+    for src, dests in graph._edges.items():
+        if src not in keep:
+            continue
+        for dest in dests:
+            if dest in keep:
+                pruned.add_edge(src, dest)
+    return pruned
