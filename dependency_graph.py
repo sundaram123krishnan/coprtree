@@ -50,9 +50,11 @@ def build_graph(root: PackageMetadata) -> DependencyGraph:
     return graph
 
 
-def resolve_graph(graph: DependencyGraph, chroot: str, project: str | None = None) -> DependencyGraph:
+def resolve_graph(graph: DependencyGraph, chroot: str, project: str | None = None) -> list[list[PackageNode]]:
+    """Prune deps Fedora/Copr already provides, then return the topo-sorted build levels."""
     keep = _nodes_to_keep(graph, chroot, project)
-    return _subgraph(graph, keep)
+    pruned = _subgraph(graph, keep)
+    return _build_levels(pruned)
 
 
 def _nodes_to_keep(graph: DependencyGraph, chroot: str, project: str | None) -> set[PackageNode]:
@@ -63,6 +65,21 @@ def _nodes_to_keep(graph: DependencyGraph, chroot: str, project: str | None) -> 
         if not has_package_in_repository(node.name, chroot, project):
             keep.add(node)
     return keep
+
+
+def _build_levels(graph: DependencyGraph) -> list[list[PackageNode]]:
+    remaining = {n: set(deps) for n, deps in graph._edges.items()}
+    levels: list[list[PackageNode]] = []
+    while remaining:
+        ready = [n for n, deps in remaining.items() if not deps]
+        if not ready:
+            raise ValueError(f"Cycle in dependency graph among: {sorted(n.name for n in remaining)}")
+        levels.append(sorted(ready, key=lambda n: n.name))
+        for n in ready:
+            del remaining[n]
+        for deps in remaining.values():
+            deps.difference_update(ready)
+    return levels
 
 
 def _subgraph(graph: DependencyGraph, keep: set[PackageNode]) -> DependencyGraph:
