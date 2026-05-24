@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from api import fetch_package_metadata
-from dependency_graph import DependencyGraph, build_graph 
+
+from dependency_graph import DependencyGraph, build_graph, resolve_graph
 
 
 @dataclass(frozen=True)
@@ -15,7 +15,6 @@ class BuildTarget:
 class DependencySpec:
     name: str
     requirement: str
-    kind: str
 
 
 @dataclass(frozen=True)
@@ -28,16 +27,16 @@ class PackageMetadata:
 
 class Coprtree:
     def __init__(self, target: BuildTarget):
+        from api import fetch_package_metadata  # lazy: break main<->api circular import
         self.target = target
         self.metadata = fetch_package_metadata(target)
         # this would contain the full dependency graph, including nodes that fedora and copr repositories already provides
         self.graph = build_graph(self.metadata)
 
     def to_build(self) -> DependencyGraph:
-        return to_build(self.graph)
+        return resolve_graph(self.graph)
 
 
 if __name__ == "__main__":
     coprtree = Coprtree(BuildTarget(provider="pypi.org", name="django"))
-    full_graph = coprtree.graph
-    to_build = coprtree.to_build()
+    print(coprtree.metadata)
