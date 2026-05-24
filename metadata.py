@@ -22,8 +22,8 @@ def fetch_package_metadata(target: BuildTarget) -> PackageMetadata:
         name=target.name,
         version=pkg.number,
         dependencies=tuple(
-            # normalize package names to lowercase to avoid inconsistencies
-            DependencySpec(name=d.package_name.lower(), requirement=d.requirements)
+            # this named resolutions needs to be relooked
+            DependencySpec(name=d.package_name.split("[", 1)[0].lower(), requirement=d.requirements)
             for d in pkg.dependencies
             if not d.optional and d.kind == "runtime"
        ),
