@@ -1,0 +1,37 @@
+import httpx
+
+MDAPI_URL = "https://mdapi.fedoraproject.org/{branch}/pkg/python3-{name}"
+COPR_URL = "https://copr.fedorainfracloud.org/api_3/package"
+
+
+def has_package_in_repository(name: str, chroot: str, project: str | None = None) -> bool:
+    if _in_fedora(name, chroot):
+        return True
+    if project is not None and _in_copr(name, project):
+        return True
+    return False
+
+
+def _in_fedora(name: str, chroot: str) -> bool:
+    url = MDAPI_URL.format(branch=_branch(chroot), name=name)
+    return httpx.get(url).status_code == 200
+
+
+def _in_copr(name: str, project: str) -> bool:
+    owner, projectname = project.split("/", 1)
+    response = httpx.get(
+        COPR_URL,
+        params={
+            "ownername": owner,
+            "projectname": projectname,
+            # this needs to be revisited again, i think if a package has a python-xyz, this would insert python-python-xyz
+            # works for demo
+            "packagename": f"python-{name}",
+        },
+    )
+    return response.status_code == 200
+
+
+def _branch(chroot: str) -> str:
+    release = chroot.split("-")[1]
+    return "f44" if release == "rawhide" else f"f{release}"
