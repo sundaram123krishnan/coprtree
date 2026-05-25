@@ -4,7 +4,7 @@ from models import BuildTarget
 
 
 class Coprtree:
-    def __init__(self, target: BuildTarget, copr_project: str | None, chroot: str | None):
+    def __init__(self, target: BuildTarget, copr_project: str, chroot: str):
         self.target = target
         self.metadata = fetch_package_metadata(target)
         # this would contain the full dependency graph, including nodes that fedora and copr repositories already provides
@@ -19,7 +19,7 @@ class Coprtree:
 if __name__ == "__main__":
     coprtree = Coprtree(
         BuildTarget(provider="pypi.org", name="pydantic-ai"),
-        copr_project=None,
+        copr_project="sundaram123krishnan/test",
         chroot="fedora-44-x86_64",
     )
     # This is the topo-sorted pruned graph, so the siblings nodes of each levels can be built in parallel
