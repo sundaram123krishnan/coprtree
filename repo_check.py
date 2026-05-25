@@ -25,9 +25,10 @@ def _in_copr(name: str, project: str) -> bool:
         params={
             "ownername": owner,
             "projectname": projectname,
-            # this needs to be revisited again, i think if a package has a python-xyz, this would insert python-python-xyz
-            # works for demo
+            # for now when building the package follow the convention: `python-packagename`
             "packagename": f"python-{name}",
+            "with_latest_build": "false",
+            "with_latest_succeeded_build": "false" 
         },
     )
     return response.status_code == 200

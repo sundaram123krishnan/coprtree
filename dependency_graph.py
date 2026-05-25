@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from availability import has_package_in_repository
+from repo_check import has_package_in_repository
 from metadata import fetch_package_metadata
 from models import BuildTarget, PackageMetadata
 
