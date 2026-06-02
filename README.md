@@ -5,15 +5,26 @@ This project is in an experimental phase. The goal for the first release is to c
 
 The graph is topologically sorted to support batch builds, so that packages without inter-dependencies can be built in parallel.
 
+### Usage
+
+In `main.py`, update the `Coprtree(...)` call:
+- `BuildTarget(provider="pypi.org", name="enter-any-package-name-here")`
+- `copr_project`
+- `chroot` 
+
+```shell
+uv run main.py
+```
+NOTE: 
+- The package names are not normalized, so if ecosystem API returns `python-dateutil` and fedora has `python3-dateutil` it would still show it in the graph.
+- Copr project should be named as `python-{package-name}` for testing.
+
+
+Using https://ecosyste.ms/ API for querying dependencies for each package.
+
 ### Future Plans
 
 - Support additional providers (rubygems, npm, ...)
 - Integrate with `copr-cli`
-
-
-
-
-
-
 
 
