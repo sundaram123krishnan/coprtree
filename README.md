@@ -16,6 +16,7 @@ In `main.py`, update the `Coprtree(...)` call:
 uv run main.py
 ```
 NOTE: 
+- Supports only Fedora distributions; install `python3-dnf`.
 - Copr project should be named as `python-{package-name}` for testing.
 
 
