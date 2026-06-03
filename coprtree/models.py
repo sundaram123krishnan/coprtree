@@ -1,4 +1,9 @@
 from dataclasses import dataclass
+from typing import NewType
+
+# later provide validation
+Chroot = NewType("Chroot", str)
+CoprProject = NewType("CoprProject", str)
 
 
 @dataclass(frozen=True)
