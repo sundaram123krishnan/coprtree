@@ -16,7 +16,6 @@ In `main.py`, update the `Coprtree(...)` call:
 uv run main.py
 ```
 NOTE: 
-- The package names are not normalized, so if ecosystem API returns `python-dateutil` and fedora has `python3-dateutil` it would still show it in the graph.
 - Copr project should be named as `python-{package-name}` for testing.
 
 
