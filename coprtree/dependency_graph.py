@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from repo_check import has_package_in_repository
-from metadata import fetch_package_metadata
-from models import BuildTarget, PackageMetadata
+from .repo_check import has_package_in_repository
+from .metadata import fetch_package_metadata
+from .models import BuildTarget, Chroot, CoprProject, PackageMetadata
 
 
 @dataclass(frozen=True)
@@ -27,7 +27,7 @@ class DependencyGraph:
         self.add_node(to_node)
         self._edges[from_node].add(to_node)
 
-    def walk(self, package: PackageMetadata, visited=None) -> PackageNode:
+    def walk(self, package: PackageMetadata, chroot: Chroot, project: CoprProject, visited=None) -> PackageNode:
         if visited is None:
             visited = {}
         if package.name in visited:
@@ -37,37 +37,22 @@ class DependencyGraph:
         visited[package.name] = node
         self.add_node(node)
         for dependency in package.dependencies:
+            if has_package_in_repository(dependency.name, chroot, project):
+                continue
             child_package = fetch_package_metadata(BuildTarget(package.provider, dependency.name))
-            child_node = self.walk(child_package, visited)
+            child_node = self.walk(child_package, chroot, project, visited)
             self.add_edge(node, child_node)
         return node
 
 
-def build_graph(root: PackageMetadata) -> DependencyGraph:
+def build_graph(root: PackageMetadata, chroot: Chroot, project: CoprProject) -> DependencyGraph:
     root_node = PackageNode(root.provider, root.name, root.version)
     graph = DependencyGraph(root_node)
-    graph.walk(root)
+    graph.walk(root, chroot, project)
     return graph
 
 
-def resolve_graph(graph: DependencyGraph, chroot: str, project: str | None = None) -> list[list[PackageNode]]:
-    """Prune deps Fedora/Copr already provides, then return the topo-sorted build levels."""
-    keep = _nodes_to_keep(graph, chroot, project)
-    pruned = _subgraph(graph, keep)
-    return _build_levels(pruned)
-
-
-def _nodes_to_keep(graph: DependencyGraph, chroot: str, project: str | None) -> set[PackageNode]:
-    keep = {graph.target}
-    for node in graph._edges:
-        if node == graph.target:
-            continue
-        if not has_package_in_repository(node.name, chroot, project):
-            keep.add(node)
-    return keep
-
-
-def _build_levels(graph: DependencyGraph) -> list[list[PackageNode]]:
+def build_levels(graph: DependencyGraph) -> list[list[PackageNode]]:
     remaining = {n: set(deps) for n, deps in graph._edges.items()}
     levels: list[list[PackageNode]] = []
     while remaining:
@@ -80,16 +65,3 @@ def _build_levels(graph: DependencyGraph) -> list[list[PackageNode]]:
         for deps in remaining.values():
             deps.difference_update(ready)
     return levels
-
-
-def _subgraph(graph: DependencyGraph, keep: set[PackageNode]) -> DependencyGraph:
-    pruned = DependencyGraph(graph.target)
-    for node in keep:
-        pruned.add_node(node)
-    for src, dests in graph._edges.items():
-        if src not in keep:
-            continue
-        for dest in dests:
-            if dest in keep:
-                pruned.add_edge(src, dest)
-    return pruned
