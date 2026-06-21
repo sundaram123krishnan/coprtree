@@ -1,16 +1,18 @@
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import NewType
-
-# later provide validation
-Chroot = NewType("Chroot", str)
-CoprProject = NewType("CoprProject", str)
 
 
 @dataclass(frozen=True)
 class BuildTarget:
-    provider: "pypi.org"  # hardcode it for now, later we can support other providers
+    provider: str
     name: str
     version: str | None = None
+
+
+@dataclass(frozen=True)
+class BuildEnv:
+    chroot: str
+    copr_project: str
 
 
 # only contains non-optional dependencies
@@ -22,7 +24,15 @@ class DependencySpec:
 
 @dataclass(frozen=True)
 class PackageMetadata:
-    provider: "pypi.org"
+    provider: str
     name: str
     version: str
     dependencies: tuple[DependencySpec, ...]
+
+
+@dataclass(frozen=True)
+class Provider:
+    registry: str
+    dep_kinds: frozenset[str]
+    normalize: Callable[[str], str]
+    fedora_provide: Callable[[str], str]
