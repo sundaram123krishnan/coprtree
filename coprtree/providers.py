@@ -1,4 +1,6 @@
 from functools import partial
+import re
+
 from .exceptions import UnsupportedProvider
 from .models import Provider
 
@@ -14,7 +16,8 @@ def _perl_provide(name: str) -> str:
 PYPI = Provider(
     registry="pypi.org",
     dep_kinds=frozenset({"runtime"}),
-    normalize=lambda n: n.split("[", 1)[0].lower(),
+    # pep 503 normalized names
+    normalize=lambda n: re.sub(r"[-_.]+", "-", n.split("[", 1)[0]).lower(),
     fedora_provide=partial(_provide, "python3dist"),
 )
 
