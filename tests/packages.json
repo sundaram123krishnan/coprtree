@@ -1,0 +1,38 @@
+{
+  "packages": [
+    {
+      "provider": "pypi.org",
+      "name": "pydantic-ai",
+      "copr_project": "sundaram123krishnan/test",
+      "chroot": "fedora-44-x86_64",
+      "expected_levels": [
+        ["genai-prices", "griffelib","logfire-api"],
+        ["pydantic-graph"],
+        ["pydantic-ai-slim"],
+        ["pydantic-ai"]
+      ]
+    },
+    {
+      "provider": "metacpan.org",
+      "name": "Mojolicious",
+      "copr_project": "sundaram123krishnan/test",
+      "chroot": "fedora-44-x86_64",
+      "expected_levels": [
+        ["Mojolicious"]
+      ]
+    }
+  ],
+  "repository_checks": [
+    {
+      "provider": "metacpan.org",
+      "name": "List-Util",
+      "chroot": "fedora-44-x86_64",
+      "copr_project": "sundaram123krishnan/test"
+    }
+  ],
+  "capabilities": [
+    { "provider": "metacpan.org", "name": "List-Util", "capability": "perl(List::Util)" },
+    { "provider": "metacpan.org", "name": "perl", "capability": "perl" },
+    { "provider": "pypi.org", "name": "logfire-api", "capability": "python3dist(logfire-api)" }
+  ]
+}
