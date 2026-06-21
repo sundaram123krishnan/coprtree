@@ -18,4 +18,5 @@ CAPABILITIES = json.loads((ROOT / "packages.json").read_text())["capabilities"]
 )
 def test_fedora_provide(case):
     provider = get_provider(case["provider"])
-    assert provider.fedora_provide(case["name"]) == case["capability"]
+    name = provider.normalize(case["name"])
+    assert provider.fedora_provide(name) == case["capability"]

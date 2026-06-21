@@ -20,6 +20,16 @@
       "expected_levels": [
         ["Mojolicious"]
       ]
+    },
+    {
+      "provider": "pypi.org",
+      "name": "pyinfra",
+      "copr_project": "sundaram123krishnan/test",
+      "chroot": "fedora-44-x86_64",
+      "expected_levels": [
+        ["types-paramiko"],
+        ["pyinfra"]
+      ]
     }
   ],
   "repository_checks": [
@@ -33,6 +43,8 @@
   "capabilities": [
     { "provider": "metacpan.org", "name": "List-Util", "capability": "perl(List::Util)" },
     { "provider": "metacpan.org", "name": "perl", "capability": "perl" },
-    { "provider": "pypi.org", "name": "logfire-api", "capability": "python3dist(logfire-api)" }
+    { "provider": "pypi.org", "name": "logfire-api", "capability": "python3dist(logfire-api)" },
+    { "provider": "pypi.org", "name": "typing_extensions", "capability": "python3dist(typing-extensions)" },
+    { "provider": "pypi.org", "name": "zope.interface", "capability": "python3dist(zope-interface)" }
   ]
 }
