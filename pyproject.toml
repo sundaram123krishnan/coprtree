@@ -1,10 +1,17 @@
 [project]
 name = "coprtree"
 version = "0.1.0"
-description = "Add your description here"
+description = "Resolve a package's dependency tree into parallel fedora-copr build levels"
+authors = [{ name="Sundaram Krishnan", email="krishnsundaram@gmail.com" }]
 readme = "README.md"
 # dnf requires 3.13 version
 requires-python = ">=3.13"
 dependencies = [
     "httpx>=0.28.1",
 ]
+
+[dependency-groups]
+test = ["pytest"]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "tests"]
