@@ -36,3 +36,13 @@ jobs:
         with:
           sarif_file: ${{ steps.VCS_Diff_Lint.outputs.sarif }}
         if: ${{ always() }}
+
+  ruff-format-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v7 # v7.0.0
+
+      - name: Ruff format check
+        run: pipx run ruff format --check --diff .
