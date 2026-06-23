@@ -4,13 +4,10 @@ import functools
 from collections.abc import Callable
 
 import dnf
+import hawkey
 
+from .constants import COPR_BASEURL, FEDORA_METALINK, UPDATES_METALINK
 from .models import BuildEnv, Provider
-
-METALINK_URL = "https://mirrors.fedoraproject.org/metalink"
-FEDORA_METALINK = f"{METALINK_URL}?repo=fedora-{{release}}&arch={{arch}}"
-UPDATES_METALINK = f"{METALINK_URL}?repo=updates-released-f{{release}}&arch={{arch}}"
-COPR_BASEURL = "https://download.copr.fedorainfracloud.org/results/{project}/{chroot}/"
 
 
 def _repo_adder(base: dnf.Base) -> Callable[..., dnf.repo.Repo]:
@@ -35,10 +32,29 @@ def _sack(env: BuildEnv) -> dnf.sack.Sack:
     return base.sack
 
 
-def has_package_in_repository(provider: Provider, name: str, env: BuildEnv) -> bool:
-    query = (
-        _sack(env).query().available().filter(provides=provider.fedora_provide(name))
-    )
+def _check_package_version(sack, query, capability, constraints):
+    for op, version in constraints:
+        reldep = "{capability} {op} {version}".format(
+            capability=capability, op=op, version=version
+        )
+        query = query.filter(provides=hawkey.Reldep(sack, reldep))
+    return query
+
+
+def has_package_in_repository(
+    provider: Provider, name: str, requirement: str, env: BuildEnv
+) -> bool:
+    constraints = provider.version_constraints(requirement)
+    if constraints is None:
+        return False
+
+    sack = _sack(env)
+    capability = provider.fedora_provide(name)
+    query = sack.query().available()
+    if constraints:
+        query = _check_package_version(sack, query, capability, constraints)
+    else:
+        query = query.filter(provides=capability)
     return bool(query.run())
 
 

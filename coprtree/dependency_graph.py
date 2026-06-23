@@ -46,7 +46,9 @@ class DependencyGraph:
         visited[package.name] = node
         self.add_node(node)
         for dependency in package.dependencies:
-            if has_package_in_repository(provider, dependency.name, env):
+            if has_package_in_repository(
+                provider, dependency.name, dependency.requirement, env
+            ):
                 continue
             child_package = fetch_package_metadata(
                 BuildTarget(package.provider, dependency.name), provider, client
