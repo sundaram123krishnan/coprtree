@@ -36,3 +36,4 @@ class Provider:
     dep_kinds: frozenset[str]
     normalize: Callable[[str], str]
     fedora_provide: Callable[[str], str]
+    version_constraints: Callable[[str], list[tuple[str, str]] | None]
