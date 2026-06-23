@@ -34,6 +34,7 @@ def test_cpan_version_constraints():
 def test_pypi_version_constraints():
     pypi = get_provider("pypi.org")
     assert pypi.version_constraints("") == []
+    assert pypi.version_constraints("*") == []
     assert pypi.version_constraints(">=2.0") == [(">=", "2.0")]
     assert pypi.version_constraints("<2,>=1.6") == [("<", "2"), (">=", "1.6")]
     assert pypi.version_constraints("==2.0") == [("=", "2.0")]

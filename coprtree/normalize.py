@@ -23,7 +23,7 @@ def cpan_provide(name: str) -> str:
 
 
 matches = ["=", ">=", "<=", ">", "<"]
-# operators/version chars RPM can't express -> give up, rebuild to be safe
+# 1.8.* not handled
 not_handling = ["*", "~", "!"]
 
 DELIMETER = ","
@@ -59,7 +59,7 @@ def _constraints(
 
 
 def pypi_constraints(requirement: str) -> list[tuple[str, str]] | None:
-    if not requirement:
+    if not requirement or requirement.strip() == "*":  # any version
         return []
     return _constraints(requirement)
 
