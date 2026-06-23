@@ -2,16 +2,9 @@ from types import SimpleNamespace
 
 import httpx
 
+from .constants import LATEST_VERSION_URL, VERSION_URL
 from .exceptions import MetadataNotFound
 from .models import BuildTarget, DependencySpec, PackageMetadata, Provider
-
-BASE_URL = "https://packages.ecosyste.ms/api/v1"
-LATEST_VERSION_URL = (
-    f"{BASE_URL}/registries/{{provider}}/packages/{{name}}/latest_version"
-)
-VERSION_URL = (
-    f"{BASE_URL}/registries/{{provider}}/packages/{{name}}/versions/{{version}}"
-)
 
 
 def fetch_package_metadata(

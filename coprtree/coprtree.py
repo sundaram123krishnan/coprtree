@@ -3,12 +3,11 @@ from dataclasses import replace
 
 import httpx
 
+from .constants import TIMEOUT
 from .dependency_graph import PackageNode, build_graph, build_levels
 from .metadata import fetch_package_metadata
 from .models import BuildEnv, BuildTarget
 from .providers import get_provider
-
-TIMEOUT = 120
 
 
 def resolve_dependencies(
