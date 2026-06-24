@@ -1,30 +1,64 @@
+# CoprTree
 
-### Coprtree
+[![Tests](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml)
+[![Lint](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml)
 
-This project is in an experimental phase. The goal for the first release is to compute the dependency graph for a given package (only pypi.org is supported for now) and produce a pruned graph that reports which dependencies are missing from the Fedora and Copr repositories.
+Coprtree resolves a package's transitive dependency graph, prunes anything the target distribution or your Copr project already provides, and topologically sorts the rest into parallel build levels
 
-The graph is topologically sorted to support batch builds, so that packages without inter-dependencies can be built in parallel.
+## Supported package managers
 
-### Usage
+- [x] PyPI 
+- [x] CPAN 
+- [ ] RubyGems
+- [ ] npm
 
-In `main.py`, update the `Coprtree(...)` call:
-- `BuildTarget(provider="pypi.org", name="enter-any-package-name-here")`
-- `copr_project`
-- `chroot` 
 
-```shell
-uv run main.py
+## Supported distributions
+
+- [x] Fedora
+- [ ] CentOS Stream
+- [ ] RHEL
+- [ ] EPEL
+- [ ] AlmaLinux
+- [ ] Amazon Linux
+- [ ] Azure Linux
+- [ ] openSUSE
+- [ ] Mageia
+- [ ] openEuler
+
+## Usage
+
+```sh
+sudo dnf install python3-dnf
+
+git clone https://github.com/sundaram123krishnan/coprtree
+cd coprtree
+
+uv venv --system-site-packages
+uv sync
 ```
-NOTE: 
-- Supports only Fedora Distirubtions; install `python3-dnf`.
-- Copr project should be named as `python-{package-name}` for testing.
 
+```sh
+uv run coprtree --help
+```
 
-Using https://ecosyste.ms/ API for querying dependencies for each package.
+Resolve and print the build levels (no copr config required):
 
-### Future Plans
+```sh
+uv run coprtree --project OWNERNAME/PROJECTNAME --provider pypi --package pyinfra \
+    --chroot fedora-44-x86_64 --dry-run
+```
 
-- Support additional providers (rubygems, npm, ...)
-- Integrate with `copr-cli`
+Resolve and submit the builds to Copr:
+```sh
+uv run --extra cli coprtree --project OWNERNAME/PROJECTNAME --provider pypi \
+    --package pyinfra --chroot fedora-44-x86_64
+```
 
+NOTE: You need to configure copr in order to submit builds.\
+Refer to: https://github.com/fedora-copr/copr/tree/main/cli/copr_cli#usage
 
+## Acknowledgments
+
+- Dependency metadata is powered by the excellent [ecosyste.ms](https://github.com/ecosyste-ms/).
+- Huge thanks to [@frostyx](https://github.com/frostyx) for continuous support and guidance.
