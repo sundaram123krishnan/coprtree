@@ -20,6 +20,7 @@ def _sack(env: BuildEnv) -> dnf.sack.Sack:
     base = dnf.Base()
     base.conf.substitutions["releasever"] = release
     base.conf.substitutions["basearch"] = arch
+    base.conf.substitutions["arch"] = arch
     add_repo = _repo_adder(base)
     add_repo("fedora", metalink=FEDORA_METALINK.format(release=release, arch=arch))
     add_repo("updates", metalink=UPDATES_METALINK.format(release=release, arch=arch))
