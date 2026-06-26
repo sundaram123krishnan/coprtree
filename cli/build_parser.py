@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-
 from coprtree.constants import REGISTRY_BY_ALIAS
 
 from . import __version__

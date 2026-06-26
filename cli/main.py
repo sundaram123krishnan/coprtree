@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from argparse import ArgumentParser, Namespace
 
 from coprtree.models import BuildEnv
@@ -11,10 +10,7 @@ from . import output
 from .error_handler import error_handler
 from .submit import submit_levels
 from .build_parser import build_parser
-
-
-# supports only fedora distribution
-_CHROOT_RE = re.compile(r"fedora-\d+-\w+")
+from .supported_chroots import supported_chroots
 
 
 def print_levels(levels) -> int:
@@ -48,17 +44,16 @@ def validate_args(parser: ArgumentParser, args: Namespace) -> None:
     match args:
         case _ if "/" not in args.project:
             parser.error("--project must be in 'OWNER/PROJECT' form")
-        case _ if not _CHROOT_RE.fullmatch(args.chroot):
-            parser.error("--chroot must look like 'fedora-43-x86_64'")
+        case _ if args.chroot not in supported_chroots():
+            parser.error(f"--chroot {args.chroot!r} is not a supported chroot")
 
 
 def main() -> int:
     parser = build_parser()
     args = parser.parse_args()
 
-    validate_args(parser, args)
-
     with error_handler():
+        validate_args(parser, args)
         return run(args)
 
 
