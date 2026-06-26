@@ -35,5 +35,16 @@ class Provider:
     registry: str
     dep_kinds: frozenset[str]
     normalize: Callable[[str], str]
-    fedora_provide: Callable[[str], str]
+    provide: Callable[[str], str]
     version_constraints: Callable[[str], list[tuple[str, str]] | None]
+
+
+RepoSpec = tuple[str, dict]
+ChrootParts = tuple[str, str, str]
+
+
+@dataclass(frozen=True)
+class ChrootSpec:
+    name: str
+    releases: tuple[str, ...]
+    repos: Callable[[str, str], list[RepoSpec]]
