@@ -4,6 +4,8 @@ dynamic = ["version"]
 description = "Resolve a package's dependency tree into parallel fedora-copr build levels"
 authors = [{ name="Sundaram Krishnan", email="krishnsundaram@gmail.com" }]
 readme = "README.md"
+license = "GPL-2.0-or-later"
+license-files = ["LICENSE"]
 keywords = ["fedora", "copr", "rpm", "dnf", "packaging", "build"]
 classifiers = [
     "Development Status :: 3 - Alpha",
