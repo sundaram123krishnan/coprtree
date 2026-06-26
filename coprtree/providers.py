@@ -14,7 +14,7 @@ PYPI = Provider(
     registry="pypi.org",
     dep_kinds=frozenset({"runtime"}),
     normalize=pypi_name,
-    fedora_provide=pypi_provide,
+    provide=pypi_provide,
     version_constraints=pypi_constraints,
 )
 
@@ -23,7 +23,7 @@ CPAN = Provider(
     registry="metacpan.org",
     dep_kinds=frozenset({"configure", "build", "test", "runtime"}),
     normalize=cpan_name,
-    fedora_provide=cpan_provide,
+    provide=cpan_provide,
     version_constraints=cpan_constraints,
 )
 
