@@ -16,10 +16,10 @@ CAPABILITIES = json.loads((ROOT / "packages.json").read_text())["capabilities"]
 @pytest.mark.parametrize(
     "case", CAPABILITIES, ids=lambda c: f"{c['provider']}:{c['name']}"
 )
-def test_fedora_provide(case):
+def test_provide(case):
     provider = get_provider(case["provider"])
     name = provider.normalize(case["name"])
-    assert provider.fedora_provide(name) == case["capability"]
+    assert provider.provide(name) == case["capability"]
 
 
 def test_cpan_version_constraints():

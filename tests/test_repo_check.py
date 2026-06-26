@@ -40,7 +40,7 @@ def dnf_provides(capability: str, env: BuildEnv) -> bool:
 def test_repo_check_matches_dnf(case):
     provider = get_provider(case["provider"])
     env = BuildEnv(chroot=case["chroot"], copr_project=case["copr_project"])
-    capability = provider.fedora_provide(case["name"])
+    capability = provider.provide(case["name"])
     app = has_package_in_repository(
         provider, case["name"], case.get("requirement", "0"), env
     )
