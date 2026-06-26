@@ -6,6 +6,10 @@ class UnsupportedProvider(CoprtreeError):
     """The requested ecosystem/registry has no Provider registered."""
 
 
+class UnsupportedDistribution(CoprtreeError):
+    """The chroot's distribution is not registered (or is malformed)."""
+
+
 class MetadataNotFound(CoprtreeError):
     """ecosyste.ms has no fetchable package for a dependency name."""
 
