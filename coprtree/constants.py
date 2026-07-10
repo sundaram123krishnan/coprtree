@@ -2,12 +2,15 @@
 Project wide constants
 """
 
-BASE_URL = "https://packages.ecosyste.ms/api/v1"
+ECOSYSTEMS_BASE_URL = "https://packages.ecosyste.ms/api/v1/registries"
 LATEST_VERSION_URL = (
-    f"{BASE_URL}/registries/{{provider}}/packages/{{name}}/latest_version"
+    f"{ECOSYSTEMS_BASE_URL}/{{provider}}/packages/{{name}}/latest_version"
 )
 VERSION_URL = (
-    f"{BASE_URL}/registries/{{provider}}/packages/{{name}}/versions/{{version}}"
+    f"{ECOSYSTEMS_BASE_URL}/{{provider}}/packages/{{name}}/versions/{{version}}"
+)
+PACKAGE_VERSIONS_URL = (
+    f"{ECOSYSTEMS_BASE_URL}/{{provider}}/packages/{{name}}/version_numbers"
 )
 
 METALINK_URL = "https://mirrors.fedoraproject.org/metalink"
