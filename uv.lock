@@ -107,6 +107,7 @@ name = "coprtree"
 source = { editable = "." }
 dependencies = [
     { name = "httpx" },
+    { name = "packaging" },
 ]
 
 [package.optional-dependencies]
@@ -123,6 +124,7 @@ test = [
 requires-dist = [
     { name = "copr", marker = "extra == 'cli'", specifier = ">=2.6" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "packaging", specifier = ">=26.2" },
 ]
 provides-extras = ["cli"]
 
