@@ -2,7 +2,7 @@ from types import SimpleNamespace
 
 import httpx
 
-from .constants import LATEST_VERSION_URL, VERSION_URL
+from .constants import LATEST_VERSION_URL, VERSION_URL, PACKAGE_VERSIONS_URL
 from .exceptions import MetadataNotFound
 from .models import BuildTarget, DependencySpec, PackageMetadata, Provider
 
@@ -40,3 +40,20 @@ def fetch_package_metadata(
             if not d.optional and d.kind in provider.dep_kinds
         ),
     )
+
+
+def get_package_versions(
+    package_name: str, package_provider: str, client: httpx.Client
+) -> list[str]:
+    """Get all versions for a package"""
+    url = PACKAGE_VERSIONS_URL.format(provider=package_provider, name=package_name)
+    response = client.get(url)
+    try:
+        response.raise_for_status()
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code == 404:
+            raise MetadataNotFound(
+                f"no ecosyste.ms package for {package_name!r}"
+            ) from error
+        raise
+    return response.json()

@@ -5,7 +5,7 @@ import httpx
 
 from .exceptions import CircularDependency
 from .repo_check import has_package_in_repository
-from .metadata import fetch_package_metadata
+from .metadata import fetch_package_metadata, get_package_versions
 from .models import BuildEnv, BuildTarget, PackageMetadata, Provider
 
 
@@ -50,6 +50,7 @@ class DependencyGraph:
                 provider, dependency.name, dependency.requirement, env
             ):
                 continue
+            get_package_versions(package.name, package.provider, client)
             child_package = fetch_package_metadata(
                 BuildTarget(package.provider, dependency.name), provider, client
             )
