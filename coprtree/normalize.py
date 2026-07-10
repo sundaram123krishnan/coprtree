@@ -1,10 +1,14 @@
 from functools import partial
-import re
+from packaging.specifiers import InvalidSpecifier, SpecifierSet
+from packaging.utils import canonicalize_name
+from packaging.version import Version
+
+from .exceptions import CoprtreeError
 
 
 def pypi_name(name: str) -> str:
-    # PEP 503: strip extras, lowercase, collapse runs of -_. to a single -
-    return re.sub(r"[-_.]+", "-", name.split("[", 1)[0]).lower()
+    # ignore[] optional deps
+    return canonicalize_name(name.split("[", 1)[0])
 
 
 def cpan_name(name: str) -> str:
@@ -69,3 +73,23 @@ def cpan_constraints(requirement: str) -> list[tuple[str, str]] | None:
     if requirement in ("0", ""):
         return []
     return _constraints(requirement, default_op=">=")
+
+
+def cpan_resolve_version(*_) -> str:
+    """Resolve to cpan package version"""
+    raise NotImplementedError("CPAN version resolution is not implemented")
+
+
+def pypi_resolve_version(requirement: str, package_versions: list[str]) -> str:
+    """Resolve to pypi package version"""
+    if not requirement or requirement.strip() == "*":
+        spec = SpecifierSet("")
+    else:
+        try:
+            spec = SpecifierSet(requirement)
+        except InvalidSpecifier as e:
+            raise CoprtreeError(f"invalid version requirement {requirement!r}") from e
+    candidates = list(spec.filter(package_versions))
+    if not candidates:
+        raise CoprtreeError(f"no released version satisfies {requirement!r}")
+    return max(candidates, key=Version)

@@ -4,9 +4,11 @@ from .normalize import (
     cpan_constraints,
     cpan_name,
     cpan_provide,
+    cpan_resolve_version,
     pypi_constraints,
     pypi_name,
     pypi_provide,
+    pypi_resolve_version,
 )
 
 
@@ -16,6 +18,7 @@ PYPI = Provider(
     normalize=pypi_name,
     provide=pypi_provide,
     version_constraints=pypi_constraints,
+    resolve_version=pypi_resolve_version,
 )
 
 
@@ -25,6 +28,7 @@ CPAN = Provider(
     normalize=cpan_name,
     provide=cpan_provide,
     version_constraints=cpan_constraints,
+    resolve_version=cpan_resolve_version,
 )
 
 

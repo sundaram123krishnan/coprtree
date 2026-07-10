@@ -1,18 +1,6 @@
 {
   "packages": [
     {
-      "provider": "pypi.org",
-      "name": "pydantic-ai",
-      "copr_project": "sundaram123krishnan/test",
-      "chroot": "fedora-44-x86_64",
-      "expected_levels": [
-        ["genai-prices", "griffelib","logfire-api"],
-        ["pydantic-graph"],
-        ["pydantic-ai-slim"],
-        ["pydantic-ai"]
-      ]
-    },
-    {
       "provider": "metacpan.org",
       "name": "Mojolicious",
       "copr_project": "sundaram123krishnan/test",
