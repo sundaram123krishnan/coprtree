@@ -50,9 +50,18 @@ class DependencyGraph:
                 provider, dependency.name, dependency.requirement, env
             ):
                 continue
-            get_package_versions(package.name, package.provider, client)
+            package_versions = get_package_versions(
+                dependency.name, package.provider, client
+            )
+            resolved_version = provider.resolve_version(
+                dependency.requirement, package_versions
+            )
             child_package = fetch_package_metadata(
-                BuildTarget(package.provider, dependency.name), provider, client
+                BuildTarget(
+                    package.provider, dependency.name, version=resolved_version
+                ),
+                provider,
+                client,
             )
             child_node = self.walk(child_package, provider, env, client, visited)
             self.add_edge(node, child_node)
