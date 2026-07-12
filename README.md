@@ -2,6 +2,8 @@
 
 [![Tests](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml)
 [![Lint](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml)
+[![codecov](https://codecov.io/gh/sundaram123krishnan/coprtree/branch/master/graph/badge.svg)](https://codecov.io/gh/sundaram123krishnan/coprtree)
+
 
 Coprtree resolves a package's transitive dependency graph, prunes anything the target distribution or your Copr project already provides, and topologically sorts the rest into parallel build levels
 
