@@ -4,8 +4,6 @@ from dataclasses import dataclass
 import httpx
 
 from .exceptions import CircularDependency
-from .repo_check import has_package_in_repository
-from .metadata import fetch_package_metadata, get_package_versions
 from .models import BuildEnv, BuildTarget, PackageMetadata, Provider
 
 
@@ -37,6 +35,9 @@ class DependencyGraph:
         client: httpx.Client,
         visited=None,
     ) -> PackageNode:
+        from .repo_check import has_package_in_repository
+        from .metadata import fetch_package_metadata, get_package_versions
+
         if visited is None:
             visited = {}
         if package.name in visited:
