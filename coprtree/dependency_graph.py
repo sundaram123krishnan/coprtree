@@ -55,7 +55,7 @@ class DependencyGraph:
                 dependency.name, package.provider, client
             )
             resolved_version = provider.resolve_version(
-                dependency.requirement, package_versions
+                dependency.name, dependency.requirement, package_versions
             )
             child_package = fetch_package_metadata(
                 BuildTarget(

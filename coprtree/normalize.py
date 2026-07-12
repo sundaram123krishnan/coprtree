@@ -80,7 +80,9 @@ def cpan_resolve_version(*_) -> str:
     raise NotImplementedError("CPAN version resolution is not implemented")
 
 
-def pypi_resolve_version(requirement: str, package_versions: list[str]) -> str:
+def pypi_resolve_version(
+    package_name: str, requirement: str, package_versions: list[str]
+) -> str:
     """Resolve to pypi package version"""
     if not requirement or requirement.strip() == "*":
         spec = SpecifierSet("")
@@ -88,8 +90,12 @@ def pypi_resolve_version(requirement: str, package_versions: list[str]) -> str:
         try:
             spec = SpecifierSet(requirement)
         except InvalidSpecifier as e:
-            raise CoprtreeError(f"invalid version requirement {requirement!r}") from e
+            raise CoprtreeError(
+                f"invalid version requirement {requirement!r} for {package_name}"
+            ) from e
     candidates = list(spec.filter(package_versions))
     if not candidates:
-        raise CoprtreeError(f"no released version satisfies {requirement!r}")
+        raise CoprtreeError(
+            f"ecosyste.ms has no released version of {package_name} satisfying {requirement!r}"
+        )
     return max(candidates, key=Version)

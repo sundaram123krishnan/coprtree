@@ -37,7 +37,7 @@ class Provider:
     normalize: Callable[[str], str]
     provide: Callable[[str], str]
     version_constraints: Callable[[str], list[tuple[str, str]] | None]
-    resolve_version: Callable[[str, list[str]], str]
+    resolve_version: Callable[[str, str, list[str]], str]
 
 
 RepoSpec = tuple[str, dict]
