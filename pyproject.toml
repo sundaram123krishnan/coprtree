@@ -39,7 +39,10 @@ build-backend = "hatchling.build"
 path = "cli/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["coprtree", "cli"]
+packages = ["coprtree"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["cli", "main.py", "tests/test_cli.py"]
 
 [dependency-groups]
 test = ["pytest", "pytest-cov"]
