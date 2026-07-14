@@ -4,8 +4,8 @@ CLI Tests
 
 import pytest
 
-from cli.build_parser import build_parser
-from cli.custom import CUSTOM_SOURCES
+from coprtree_cli.build_parser import build_parser
+from coprtree_cli.custom import CUSTOM_SOURCES
 from coprtree.constants import REGISTRY_BY_ALIAS
 from coprtree.chroots import is_supported_chroot
 
