@@ -1,51 +1,8 @@
-[project]
-name = "coprtree"
-dynamic = ["version"]
-description = "Resolve a package's dependency tree into parallel fedora-copr build levels"
-authors = [{ name="Sundaram Krishnan", email="krishnsundaram@gmail.com" }]
-readme = "README.md"
-license = "GPL-2.0-or-later"
-license-files = ["LICENSE"]
-keywords = ["fedora", "copr", "rpm", "dnf", "packaging", "build"]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "Intended Audience :: System Administrators",
-    "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Software Development :: Build Tools",
-    "Topic :: System :: Software Distribution",
- ]
-requires-python = ">=3.13"
-dependencies = [
-    "httpx>=0.28.1",
-    "packaging>=26.2",
+[tool.uv.workspace]
+members = [
+    "coprtree",
+    "coprtree-cli"
 ]
-
-[project.optional-dependencies]
-cli = ["copr>=2.6"]
-
-[project.scripts]
-coprtree = "cli.main:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.version]
-path = "cli/__init__.py"
-
-[tool.hatch.build.targets.wheel]
-packages = ["coprtree"]
-
-[tool.hatch.build.targets.sdist]
-exclude = ["cli", "main.py", "tests/test_cli.py"]
 
 [dependency-groups]
 test = ["pytest", "pytest-cov"]
-
-[tool.pytest.ini_options]
-pythonpath = [".", "tests"]
