@@ -6,7 +6,7 @@ import pytest
 
 from coprtree.coprtree import resolve_dependencies
 
-from packages_list import PACKAGES
+from coprtree.tests.packages_list import PACKAGES
 
 
 @pytest.mark.parametrize("pkg", PACKAGES, ids=lambda p: p.target.name)
