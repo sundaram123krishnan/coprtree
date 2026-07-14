@@ -1,0 +1,41 @@
+[project]
+name = "coprtree-cli"
+dynamic = ["version"]
+description = "Command-line interface for resolving package dependency trees into Fedora Copr build levels."
+authors = [{ name="Sundaram Krishnan", email="krishnsundaram@gmail.com" }]
+readme = "README.md"
+license = "GPL-2.0-or-later"
+license-files = ["LICENSE"]
+keywords = ["fedora", "copr", "rpm", "dnf", "packaging", "build"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: System :: Software Distribution",
+ ]
+requires-python = ">=3.14"
+dependencies = [
+    "copr>=2.6",
+    "coprtree",
+]
+[tool.uv.sources]
+coprtree = { workspace = true }
+
+[project.scripts]
+coprtree-cli = "coprtree_cli.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/coprtree_cli/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/coprtree_cli"]
