@@ -1,4 +1,4 @@
-from cli.main import main
+from coprtree_cli.main import main
 
 if __name__ == "__main__":
     raise SystemExit(main())
