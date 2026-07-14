@@ -8,7 +8,7 @@ import pytest
 
 from coprtree.providers import get_provider
 
-from coprtree.tests.packages_list import ROOT
+from .packages_list import ROOT
 
 CAPABILITIES = json.loads((ROOT / "packages.json").read_text())["capabilities"]
 

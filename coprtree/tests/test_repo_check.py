@@ -12,7 +12,7 @@ from coprtree.models import BuildEnv
 from coprtree.providers import get_provider
 from coprtree.repo_check import has_package_in_repository
 
-from coprtree.tests.packages_list import ROOT
+from .packages_list import ROOT
 
 CHECKS = json.loads((ROOT / "packages.json").read_text())["repository_checks"]
 
