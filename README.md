@@ -7,6 +7,13 @@
 
 Coprtree resolves a package's transitive dependency graph, prunes anything the target distribution or your Copr project already provides, and topologically sorts the rest into parallel build levels
 
+This is a monorepo based setup which contains:
+
+- [coprtree](coprtree/) - Dependencies resolution library
+- [coprtree-cli](coprtree-cli/) - A standalone CLI
+
+Installation and usage live in each package's README.
+
 ## Supported package managers
 
 - [x] PyPI 
@@ -27,38 +34,6 @@ Coprtree resolves a package's transitive dependency graph, prunes anything the t
 - [ ] openSUSE
 - [ ] Mageia
 - [ ] openEuler
-
-## Usage
-
-```sh
-sudo dnf install python3-dnf
-
-git clone https://github.com/sundaram123krishnan/coprtree
-cd coprtree
-
-uv venv --system-site-packages
-uv sync
-```
-
-```sh
-uv run coprtree --help
-```
-
-Resolve and print the build levels (no copr config required):
-
-```sh
-uv run coprtree --project OWNERNAME/PROJECTNAME --provider pypi --package pyinfra \
-    --chroot fedora-44-x86_64 --dry-run
-```
-
-Resolve and submit the builds to Copr:
-```sh
-uv run --extra cli coprtree --project OWNERNAME/PROJECTNAME --provider pypi \
-    --package pyinfra --chroot fedora-44-x86_64
-```
-
-NOTE: You need to configure copr in order to submit builds.\
-Refer to: https://github.com/fedora-copr/copr/tree/main/cli/copr_cli#usage
 
 ## Acknowledgments
 
