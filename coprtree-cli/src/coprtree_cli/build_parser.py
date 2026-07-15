@@ -6,7 +6,7 @@ from . import __version__
 
 def build_parser() -> ArgumentParser:
     parser = ArgumentParser(
-        prog="coprtree",
+        prog="coprtree-cli",
         description="Resolve a package's dependency tree into parallel Copr "
         "build levels and submit them.",
     )
