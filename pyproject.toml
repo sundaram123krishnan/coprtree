@@ -3,6 +3,3 @@ members = [
     "coprtree",
     "coprtree-cli"
 ]
-
-[dependency-groups]
-test = ["pytest", "pytest-cov"]
