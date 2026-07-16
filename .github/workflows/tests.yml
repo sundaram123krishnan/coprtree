@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
 jobs:
   library:
     name: Library tests
@@ -16,10 +19,12 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v7 # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
 
       - name: Run hermetic library tests
         run: >-
@@ -28,7 +33,7 @@ jobs:
           --cov=coprtree --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coprtree/coverage.xml
@@ -45,10 +50,12 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v7 # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990
 
       - name: Run hermetic CLI tests
         run: >-
@@ -56,7 +63,7 @@ jobs:
           --cov=coprtree_cli --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coprtree-cli/coverage.xml
@@ -66,7 +73,7 @@ jobs:
   integration:
     name: Integration tests
     runs-on: ubuntu-latest
-    container: fedora:latest
+    container: fedora:44
 
     defaults:
       run:
@@ -81,7 +88,9 @@ jobs:
         working-directory: .
 
       - name: Repository checkout
-        uses: actions/checkout@v7 # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Run dnf/Copr integration tests
         env:
@@ -92,7 +101,7 @@ jobs:
           --cov=coprtree --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v7
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coprtree/coverage.xml
