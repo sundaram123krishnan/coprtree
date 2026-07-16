@@ -5,17 +5,23 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
 jobs:
   python-lint-job:
     runs-on: ubuntu-latest
 
     permissions:
-      # required for all workflows
+      contents: read
+      # required to upload the SARIF to code-scanning
       security-events: write
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v7  # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: VCS Diff Lint
         uses: fedora-copr/vcs-diff-lint-action@3fe529c95a55cf7d25d1ef73d53f790710c9a352 # v1.10.0
@@ -42,7 +48,9 @@ jobs:
 
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v7 # v7.0.0
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Ruff format check
         run: pipx run ruff format --check --diff .
