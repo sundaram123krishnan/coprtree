@@ -88,7 +88,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/09/59/0e9d3f08eba799731
 
 [[package]]
 name = "coprtree"
-version = "0.1.1"
+version = "0.1.2"
 source = { editable = "coprtree" }
 dependencies = [
     { name = "httpx" },
@@ -104,7 +104,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
-    { name = "packaging", specifier = ">=26.2" },
+    { name = "packaging", specifier = ">=25.0" },
 ]
 
 [package.metadata.requires-dev]
