@@ -1,6 +1,7 @@
 # CoprTree
 
 [![PyPI](https://img.shields.io/pypi/v/coprtree)](https://pypi.org/project/coprtree/)
+[![Fedora](https://img.shields.io/fedora/v/python3-coprtree/rawhide)](https://packages.fedoraproject.org/pkgs/python-coprtree/python3-coprtree/)
 [![Tests](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/tests.yml)
 [![Lint](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml/badge.svg)](https://github.com/sundaram123krishnan/coprtree/actions/workflows/python-diff-lint.yml)
 [![codecov](https://codecov.io/gh/sundaram123krishnan/coprtree/branch/master/graph/badge.svg)](https://codecov.io/gh/sundaram123krishnan/coprtree)
