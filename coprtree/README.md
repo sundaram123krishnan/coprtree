@@ -8,11 +8,10 @@ The resolver library
 sudo dnf install python3-dnf
 ```
 
-
-Setup virtual environment
+## Installation
 
 ```sh
-uv venv --system-site-packages
+sudo dnf install python3-coprtree
 ```
 
 ## Usage
