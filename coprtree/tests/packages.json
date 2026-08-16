@@ -3,8 +3,8 @@
     {
       "provider": "metacpan.org",
       "name": "Mojolicious",
-      "copr_project": "sundaram123krishnan/test",
-      "chroot": "fedora-44-x86_64",
+      "copr_project": "sundaram123krishnan/coprtree-ci-tests",
+      "chroot": ["fedora-43-x86_64", "fedora-44-x86_64"],
       "expected_levels": [
         ["Mojolicious"]
       ]
@@ -12,8 +12,8 @@
     {
       "provider": "pypi.org",
       "name": "pyinfra",
-      "copr_project": "sundaram123krishnan/test",
-      "chroot": "fedora-44-x86_64",
+      "copr_project": "sundaram123krishnan/coprtree-ci-tests",
+      "chroot": ["fedora-43-x86_64", "fedora-44-x86_64"],
       "expected_levels": [
         ["types-paramiko"],
         ["pyinfra"]
@@ -24,8 +24,8 @@
     {
       "provider": "metacpan.org",
       "name": "List-Util",
-      "chroot": "fedora-44-x86_64",
-      "copr_project": "sundaram123krishnan/test"
+      "chroot": ["fedora-43-x86_64", "fedora-44-x86_64"],
+      "copr_project": "sundaram123krishnan/coprtree-ci-tests"
     }
   ],
   "capabilities": [

@@ -17,8 +17,11 @@ METALINK_URL = "https://mirrors.fedoraproject.org/metalink"
 FEDORA_METALINK = f"{METALINK_URL}?repo=fedora-{{release}}&arch={{arch}}"
 UPDATES_METALINK = f"{METALINK_URL}?repo=updates-released-f{{release}}&arch={{arch}}"
 COPR_BASEURL = "https://download.copr.fedorainfracloud.org/results/{project}/{chroot}/"
+CACHEDIR = "~/.cache/coprtree/{chroot}/{project}"
 
 REGISTRY_BY_ALIAS = {"pypi": "pypi.org", "cpan": "metacpan.org"}
 
 # make it configurable??
 TIMEOUT = 120
+
+MAX_WORKERS = 8

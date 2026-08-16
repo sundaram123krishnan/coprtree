@@ -5,17 +5,16 @@ httpx client singleton tests
 import httpx
 import pytest
 
-import coprtree.singleton as singleton_module
 from coprtree.constants import TIMEOUT
 from coprtree.singleton import get_httpx_client
 
 
 @pytest.fixture(autouse=True)
 def reset_singleton():
-    """Reset the module-level singleton before and after each test."""
-    singleton_module._client = None  # pylint: disable=protected-access
+    """Reset the cached singleton before and after each test."""
+    get_httpx_client.cache_clear()
     yield
-    singleton_module._client = None  # pylint: disable=protected-access
+    get_httpx_client.cache_clear()
 
 
 def test_returns_an_httpx_client():
