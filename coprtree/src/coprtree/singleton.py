@@ -1,15 +1,39 @@
 """Generic singleton module"""
 
-import httpx
+from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from typing import Generic, TypeVar
 
-from .constants import TIMEOUT
+from httpx import Client
 
-_CLIENT: httpx.Client | None = None
+from .constants import MAX_WORKERS, TIMEOUT
+
+T = TypeVar("T")
 
 
-def get_httpx_client() -> httpx.Client:
+class Singleton(Generic[T]):
+    """Decorator that turns a function into a singleton"""
+
+    def __init__(self, factory: Callable[[], T]) -> None:
+        self._factory = factory
+        self._instance: tuple[T] | None = None
+
+    def __call__(self) -> T:
+        if self._instance is None:
+            self._instance = (self._factory(),)
+        return self._instance[0]
+
+    def cache_clear(self) -> None:
+        self._instance = None
+
+
+@Singleton
+def get_httpx_client() -> Client:
     """Returns singleton httpx client instance"""
-    global _CLIENT  # pylint: disable=global-statement
-    if _CLIENT is None:
-        _CLIENT = httpx.Client(timeout=TIMEOUT)
-    return _CLIENT
+    return Client(timeout=TIMEOUT)
+
+
+@Singleton
+def get_threadpool_executor() -> ThreadPoolExecutor:
+    """Returns singleton thread pool executor instance"""
+    return ThreadPoolExecutor(max_workers=MAX_WORKERS)
