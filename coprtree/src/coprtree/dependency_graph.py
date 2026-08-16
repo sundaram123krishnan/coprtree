@@ -1,8 +1,6 @@
 from collections.abc import Iterator
 from dataclasses import dataclass
 
-import httpx
-
 from .exceptions import CircularDependency
 from .models import BuildEnv, BuildTarget, PackageMetadata, Provider
 
@@ -32,11 +30,10 @@ class DependencyGraph:
         package: PackageMetadata,
         provider: Provider,
         env: BuildEnv,
-        client: httpx.Client,
         visited=None,
     ) -> PackageNode:
-        from .repo_check import has_package_in_repository
         from .metadata import fetch_package_metadata, get_package_versions
+        from .repo_check import has_package_in_repository
 
         if visited is None:
             visited = {}
@@ -51,9 +48,7 @@ class DependencyGraph:
                 provider, dependency.name, dependency.requirement, env
             ):
                 continue
-            package_versions = get_package_versions(
-                dependency.name, package.provider, client
-            )
+            package_versions = get_package_versions(dependency.name, package.provider)
             resolved_version = provider.resolve_version(
                 dependency.name, dependency.requirement, package_versions
             )
@@ -62,9 +57,8 @@ class DependencyGraph:
                     package.provider, dependency.name, version=resolved_version
                 ),
                 provider,
-                client,
             )
-            child_node = self.walk(child_package, provider, env, client, visited)
+            child_node = self.walk(child_package, provider, env, visited)
             self.add_edge(node, child_node)
         return node
 
@@ -73,11 +67,10 @@ def build_graph(
     root: PackageMetadata,
     provider: Provider,
     env: BuildEnv,
-    client: httpx.Client,
 ) -> DependencyGraph:
     root_node = PackageNode(root.provider, root.name, root.version)
     graph = DependencyGraph(root_node)
-    graph.walk(root, provider, env, client)
+    graph.walk(root, provider, env)
     return graph
 
 
