@@ -11,7 +11,7 @@ class BuildTarget:
 
 @dataclass(frozen=True)
 class BuildEnv:
-    chroot: str
+    chroot: list[str]
     copr_project: str
 
 
