@@ -24,6 +24,7 @@ class Singleton(Generic[T]):
         return self._instance[0]
 
     def cache_clear(self) -> None:
+        """Reset the cached instance so the next call rebuilds it"""
         self._instance = None
 
 

@@ -18,22 +18,25 @@ CHECKS = json.loads((ROOT / "packages.json").read_text())["repository_checks"]
 
 
 def dnf_provides(capability: str, env: BuildEnv) -> bool:
-    copr = COPR_BASEURL.format(project=env.copr_project, chroot=env.chroot)
-    result = subprocess.run(
-        [
-            "dnf",
-            "repoquery",
-            "--quiet",
-            "--whatprovides",
-            capability,
-            "--repofrompath",
-            f"copr,{copr}",
-        ],
-        capture_output=True,
-        text=True,
-        check=True,
+    return all(
+        bool(
+            subprocess.run(
+                [
+                    "dnf",
+                    "repoquery",
+                    "--quiet",
+                    "--whatprovides",
+                    capability,
+                    "--repofrompath",
+                    f"copr,{COPR_BASEURL.format(project=env.copr_project, chroot=chroot)}",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+        )
+        for chroot in env.chroot
     )
-    return bool(result.stdout.strip())
 
 
 @pytest.mark.parametrize("case", CHECKS, ids=lambda c: f"{c['provider']}:{c['name']}")
