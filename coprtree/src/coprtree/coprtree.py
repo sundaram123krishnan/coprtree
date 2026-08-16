@@ -1,9 +1,6 @@
 from collections.abc import Iterable, Iterator
 from dataclasses import replace
 
-import httpx
-
-from .constants import TIMEOUT
 from .dependency_graph import PackageNode, build_graph, build_levels
 from .metadata import fetch_package_metadata
 from .models import BuildEnv, BuildTarget
@@ -19,7 +16,6 @@ def resolve_dependencies(
     if dep_kinds:
         provider = replace(provider, dep_kinds=frozenset(dep_kinds))
 
-    with httpx.Client(timeout=TIMEOUT) as client:
-        metadata = fetch_package_metadata(target, provider, client)
-        graph = build_graph(metadata, provider, env, client)
+    metadata = fetch_package_metadata(target, provider)
+    graph = build_graph(metadata, provider, env)
     return build_levels(graph)

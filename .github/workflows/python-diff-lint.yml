@@ -28,7 +28,7 @@ jobs:
         id: VCS_Diff_Lint
         with:
           install_rpm_packages: |
-            python3-dnf python3-httpx python3-packaging
+            python3-dnf python3-httpx python3-packaging python3-pytest
 
       - name: Upload artifact with detected defects in SARIF format
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

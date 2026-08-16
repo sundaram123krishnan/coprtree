@@ -2,14 +2,13 @@ from types import SimpleNamespace
 
 import httpx
 
-from .constants import LATEST_VERSION_URL, VERSION_URL, PACKAGE_VERSIONS_URL
+from .constants import LATEST_VERSION_URL, PACKAGE_VERSIONS_URL, VERSION_URL
 from .exceptions import MetadataNotFound
 from .models import BuildTarget, DependencySpec, PackageMetadata, Provider
+from .singleton import get_httpx_client
 
 
-def fetch_package_metadata(
-    target: BuildTarget, provider: Provider, client: httpx.Client
-) -> PackageMetadata:
+def fetch_package_metadata(target: BuildTarget, provider: Provider) -> PackageMetadata:
     """Fetch metadata from ecosyste.ms for a package."""
     url = (
         VERSION_URL.format(
@@ -18,7 +17,7 @@ def fetch_package_metadata(
         if target.version
         else LATEST_VERSION_URL.format(provider=target.provider, name=target.name)
     )
-    response = client.get(url)
+    response = get_httpx_client().get(url)
     try:
         response.raise_for_status()
     except httpx.HTTPStatusError as error:
@@ -42,12 +41,10 @@ def fetch_package_metadata(
     )
 
 
-def get_package_versions(
-    package_name: str, package_provider: str, client: httpx.Client
-) -> list[str]:
+def get_package_versions(package_name: str, package_provider: str) -> list[str]:
     """Get all versions for a package"""
     url = PACKAGE_VERSIONS_URL.format(provider=package_provider, name=package_name)
-    response = client.get(url)
+    response = get_httpx_client().get(url)
     try:
         response.raise_for_status()
     except httpx.HTTPStatusError as error:
