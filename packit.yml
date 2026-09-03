@@ -3,6 +3,8 @@
 
 specfile_path: ./coprtree/python-coprtree.spec
 
+upstream_tag_template: "v{version}"
+
 srpm_build_deps:
   - python3-build
   - python3-hatchling
