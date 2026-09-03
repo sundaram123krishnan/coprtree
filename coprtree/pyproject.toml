@@ -1,6 +1,6 @@
 [project]
 name = "coprtree"
-version = "0.1.2"
+version = "0.1.3"
 description = "Resolve a package's dependency tree into parallel Fedora Copr build levels"
 authors = [{ name="Sundaram Krishnan", email="krishnsundaram@gmail.com" }]
 readme = "README.md"

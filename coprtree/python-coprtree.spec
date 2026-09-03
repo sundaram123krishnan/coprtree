@@ -1,5 +1,5 @@
 Name:           python-coprtree
-Version:        0.1.2
+Version:        0.1.3
 Release:        %autorelease
 Summary:        Resolve a package's dependency tree into parallel Fedora Copr build levels
 
