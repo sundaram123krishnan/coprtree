@@ -26,7 +26,6 @@ jobs:
 
   - job: propose_downstream
     trigger: release
-    manual_trigger: true
     dist_git_branches:
       - fedora-all
 
