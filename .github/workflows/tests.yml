@@ -73,7 +73,7 @@ jobs:
   integration:
     name: Integration tests
     runs-on: ubuntu-latest
-    container: fedora:44
+    container: fedora:46
 
     defaults:
       run:
