@@ -9,13 +9,15 @@ from .providers import get_provider
 
 def resolve_dependencies(
     target: BuildTarget,
-    env: BuildEnv,
+    copr_project: str,
+    chroots: list[str],
     dep_kinds: Iterable[str] | None = None,
 ) -> Iterator[list[PackageNode]]:
     provider = get_provider(target.provider)
     if dep_kinds:
         provider = replace(provider, dep_kinds=frozenset(dep_kinds))
 
+    env = BuildEnv(chroots, copr_project)
     metadata = fetch_package_metadata(target, provider)
     graph = build_graph(metadata, provider, env)
     return build_levels(graph)

@@ -1,6 +1,9 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from coprtree.chroots import Chroot, get_chroot
+from coprtree.exceptions import InvalidCoprProject
+
 
 @dataclass(frozen=True)
 class BuildTarget:
@@ -9,10 +12,25 @@ class BuildTarget:
     version: str | None = None
 
 
-@dataclass(frozen=True)
-class BuildEnv:
-    chroot: list[str]
+# i don't like it defined here, but good for now
+class BuildEnv:  # pylint: disable=too-few-public-methods
+    chroots: list[Chroot]
     copr_project: str
+
+    def _validate_copr_project(self, copr_project: str) -> str:
+        if "/" not in copr_project:
+            raise InvalidCoprProject(
+                f"copr project {copr_project!r} must be in 'OWNER/PROJECT' form"
+            )
+        return copr_project
+
+    def __init__(self, chroots_str: list[str], copr_project: str):
+        self.chroots = []
+        self.copr_project = self._validate_copr_project(copr_project)
+        # build the object for the respective chroots list
+        for chroot in chroots_str:
+            chroot_obj = get_chroot(chroot)
+            self.chroots.append(chroot_obj)
 
 
 # only contains non-optional dependencies
@@ -38,14 +56,3 @@ class Provider:
     provide: Callable[[str], str]
     version_constraints: Callable[[str], list[tuple[str, str]] | None]
     resolve_version: Callable[[str, str, list[str]], str]
-
-
-RepoSpec = tuple[str, dict]
-ChrootParts = tuple[str, str, str]
-
-
-@dataclass(frozen=True)
-class ChrootSpec:
-    name: str
-    releases: tuple[str, ...]
-    repos: Callable[[str, str], list[RepoSpec]]

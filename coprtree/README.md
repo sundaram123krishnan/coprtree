@@ -18,13 +18,12 @@ sudo dnf install python3-coprtree
 
 ```python
 from coprtree.coprtree import resolve_dependencies
-from coprtree.models import BuildTarget, BuildEnv
+from coprtree.models import BuildTarget
 
 levels = resolve_dependencies(
     BuildTarget(provider="pypi.org", name="pydantic-ai"),
-    BuildEnv(
-        chroot=["fedora-44-x86_64", "fedora-43-x86_64"], copr_project="OWNER/PROJECT"
-    ),
+    copr_project="OWNER/PROJECT",
+    chroots=["fedora-44-x86_64", "fedora-43-x86_64"],
 )
 ```
 

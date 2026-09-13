@@ -21,7 +21,7 @@ def load_packages() -> list[TestPackage]:
             target=BuildTarget(
                 provider=p["provider"], name=p["name"], version=p.get("version")
             ),
-            env=BuildEnv(chroot=p["chroot"], copr_project=p["copr_project"]),
+            env=BuildEnv(chroots_str=p["chroot"], copr_project=p["copr_project"]),
             expected_levels=p["expected_levels"],
         )
         for p in json.loads(PACKAGE_DATA.read_text())["packages"]
