@@ -4,6 +4,7 @@ flag_management:
 
 ignore:
   - "**/__main__.py"
+  - "coprtree-cli/**"
 
 coverage:
   round: up
