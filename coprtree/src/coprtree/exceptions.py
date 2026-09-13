@@ -10,6 +10,10 @@ class UnsupportedDistribution(CoprtreeError):
     """The chroot's distribution is not registered (or is malformed)."""
 
 
+class InvalidCoprProject(CoprtreeError):
+    """The copr project isn't in 'OWNER/PROJECT' form."""
+
+
 class MetadataNotFound(CoprtreeError):
     """ecosyste.ms has no fetchable package for a dependency name."""
 

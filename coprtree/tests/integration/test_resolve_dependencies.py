@@ -11,6 +11,10 @@ from ..packages_list import PACKAGES
 
 @pytest.mark.parametrize("pkg", PACKAGES, ids=lambda p: p.target.name)
 def test_resolve_dependencies(pkg):
-    levels = resolve_dependencies(pkg.target, pkg.env)
+    levels = resolve_dependencies(
+        pkg.target,
+        pkg.env.copr_project,
+        [str(chroot) for chroot in pkg.env.chroots],
+    )
     actual = [[node.name for node in level] for level in levels]
     assert actual == pkg.expected_levels

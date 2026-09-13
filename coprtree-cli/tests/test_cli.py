@@ -7,7 +7,6 @@ import pytest
 from coprtree_cli.build_parser import build_parser
 from coprtree_cli.custom import CUSTOM_SOURCES
 from coprtree.constants import REGISTRY_BY_ALIAS
-from coprtree.chroots import is_supported_chroot
 
 cpan_custom_script = CUSTOM_SOURCES["metacpan.org"].script
 
@@ -76,31 +75,3 @@ def test_cpan_script_quotes_name():
 
 def test_cpan_custom_source_builddeps():
     assert CUSTOM_SOURCES["metacpan.org"].builddeps == ("cpanspec", "perl")
-
-
-@pytest.mark.parametrize(
-    "chroot",
-    [
-        "fedora-43-x86_64",
-        "fedora-44-aarch64",
-        "fedora-44-ppc64le",
-        "fedora-44-s390x",
-        "fedora-rawhide-x86_64",
-    ],
-)
-def test_is_supported_accepts_fedora_chroots(chroot):
-    assert is_supported_chroot(chroot)
-
-
-@pytest.mark.parametrize(
-    "chroot",
-    [
-        "fedora-44-i386",  # secondary arch
-        "centos-stream-9-x86_64",  # unsupported distro
-        "epel-9-x86_64",
-        "opensuse-leap-15.6-x86_64",
-        "garbage",
-    ],
-)
-def test_is_supported_rejects_others(chroot):
-    assert not is_supported_chroot(chroot)

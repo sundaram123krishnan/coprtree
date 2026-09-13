@@ -28,21 +28,21 @@ def dnf_provides(capability: str, env: BuildEnv) -> bool:
                     "--whatprovides",
                     capability,
                     "--repofrompath",
-                    f"copr,{COPR_BASEURL.format(project=env.copr_project, chroot=chroot)}",
+                    f"copr,{COPR_BASEURL.format(project=env.copr_project, chroot=str(chroot))}",
                 ],
                 capture_output=True,
                 text=True,
                 check=True,
             ).stdout.strip()
         )
-        for chroot in env.chroot
+        for chroot in env.chroots
     )
 
 
 @pytest.mark.parametrize("case", CHECKS, ids=lambda c: f"{c['provider']}:{c['name']}")
 def test_repo_check_matches_dnf(case):
     provider = get_provider(case["provider"])
-    env = BuildEnv(chroot=case["chroot"], copr_project=case["copr_project"])
+    env = BuildEnv(chroots_str=case["chroot"], copr_project=case["copr_project"])
     capability = provider.provide(case["name"])
     app = has_package_in_repository(
         provider, case["name"], case.get("requirement", "0"), env
