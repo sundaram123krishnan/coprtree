@@ -1,11 +1,16 @@
 from coprtree.coprtree import resolve_dependencies
-from coprtree.models import BuildEnv, BuildTarget
+from coprtree.models import BuildTarget
 
 if __name__ == "__main__":
     levels = resolve_dependencies(
         BuildTarget(provider="pypi.org", name="pydantic-ai"),
-        chroots=["fedora-44-x86_64", "fedora-rawhide-x86_64"],
-        copr_project="sundaram123krishnan/coprtreetests",
+        chroots=[
+            "opensuse-leap-16.0-x86_64",
+            "fedora-44-x86_64",
+            "fedora-rawhide-x86_64",
+            "opensuse-tumbleweed-i586",
+        ],
+        copr_project="sundaram123krishnan/coprtree-ci-tests",
     )
     # This is the topo-sorted pruned graph, so the sibling nodes of each
     # level can be built in parallel

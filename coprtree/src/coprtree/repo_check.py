@@ -21,7 +21,8 @@ def _sack(chroot: Chroot, copr_project: str) -> dnf.sack.Sack:
     base.conf.cachedir = os.path.expanduser(
         CACHEDIR.format(chroot=chroot, project=copr_project.replace("/", "_"))
     )
-    base.conf.substitutions["releasever"] = chroot.release
+    if chroot.release is not None:
+        base.conf.substitutions["releasever"] = chroot.release
     base.conf.substitutions["basearch"] = chroot.arch
     base.conf.substitutions["arch"] = chroot.arch
     add_repo = _repo_adder(base)

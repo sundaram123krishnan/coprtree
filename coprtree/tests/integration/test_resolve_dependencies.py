@@ -11,6 +11,7 @@ from ..packages_list import PACKAGES
 
 @pytest.mark.parametrize("pkg", PACKAGES, ids=lambda p: p.target.name)
 def test_resolve_dependencies(pkg):
+    """Resolved levels match the expected fixture for this package."""
     levels = resolve_dependencies(
         pkg.target,
         pkg.env.copr_project,
