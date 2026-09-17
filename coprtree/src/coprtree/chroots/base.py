@@ -1,11 +1,16 @@
 """Shared Chroot interface every distro implementation builds on."""
 
+import re
 from abc import ABC, abstractmethod
-from typing import ClassVar, override
+from typing import ClassVar, Self, override
 
 from ..exceptions import UnsupportedDistribution
 
-RepoSpec = tuple[str, dict[str, str]]
+type RepoSpec = tuple[str, dict[str, str]]
+# None for rolling-releases
+type ReleaseArch = tuple[str | None, str]
+
+_CAMEL_BOUNDARY = re.compile(r"(?<!^)(?=[A-Z])")
 
 
 CPU_ARCH = {"x86_64", "aarch64", "ppc64le", "s390x"}
@@ -26,32 +31,53 @@ class Chroot(ABC):
     """One distro's chroot: knows its own shape, validation, and repos."""
 
     releases: ClassVar[tuple[str, ...]] = ()
-    release: str
+    release: str | None
     arch: str
+    chroot_name: str
+
+    @classmethod
+    def _canonicalize_name(cls) -> str:
+        """
+        Canonicalize the class names to relevant chroots str representation
+        """
+        return _CAMEL_BOUNDARY.sub("-", cls.__name__).lower()
 
     def _check_valid_release(self, release: str) -> str:
         """Check if it's a valid release for that distribution"""
-        name = type(self).__name__.lower()
         if release not in self.releases:
             raise UnsupportedDistribution(
-                f"unsupported {name} release {release!r}; known: {self.releases}"
+                f"unsupported {self.chroot_name} release {release!r}; "
+                + f"known: {self.releases}"
             )
         return release
 
     def __init__(self, arch: str, release: str | None = None) -> None:
+        self.chroot_name = self._canonicalize_name()
         self.arch = _check_cpu_arch(arch)
-        if release is not None:
-            self.release = self._check_valid_release(release)
+        self.release = (
+            self._check_valid_release(release) if release is not None else None
+        )
 
     @override
     def __str__(self) -> str:
-        return type(self).__name__.lower() + "-" + self.release + "-" + self.arch
+        if self.release is None:
+            return f"{self.chroot_name}-{self.arch}"
+        return f"{self.chroot_name}-{self.release}-{self.arch}"
 
     @abstractmethod
     def repos(self) -> list[RepoSpec]:
         """Repo's to load for the particular chroot"""
 
-    @classmethod
+    @staticmethod
     @abstractmethod
-    def parse(cls, chroot: str) -> Chroot | None:
+    def _match(chroot: str) -> ReleaseArch | None:
+        """Match chroot's shape"""
+
+    @classmethod
+    def parse(cls, chroot: str) -> Self | None:
         """Parse the given chroot and then return it's appropriate instance"""
+        parts = cls._match(chroot)
+        if parts is None:
+            return None
+        release, arch = parts
+        return cls(release=release, arch=arch)
