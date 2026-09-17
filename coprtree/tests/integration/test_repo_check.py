@@ -18,6 +18,7 @@ CHECKS = json.loads((ROOT / "packages.json").read_text())["repository_checks"]
 
 
 def dnf_provides(capability: str, env: BuildEnv) -> bool:
+    """Check via real dnf repoquery whether every chroot provides capability."""
     return all(
         bool(
             subprocess.run(
@@ -41,6 +42,7 @@ def dnf_provides(capability: str, env: BuildEnv) -> bool:
 
 @pytest.mark.parametrize("case", CHECKS, ids=lambda c: f"{c['provider']}:{c['name']}")
 def test_repo_check_matches_dnf(case):
+    """coprtree's repo check agrees with real dnf repoquery for this case."""
     provider = get_provider(case["provider"])
     env = BuildEnv(chroots_str=case["chroot"], copr_project=case["copr_project"])
     capability = provider.provide(case["name"])

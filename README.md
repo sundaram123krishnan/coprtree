@@ -33,7 +33,7 @@ Installation and usage live in each package's README.
 - [ ] AlmaLinux
 - [ ] Amazon Linux
 - [ ] Azure Linux
-- [ ] openSUSE
+- [x] openSUSE
 - [ ] Mageia
 - [ ] openEuler
 

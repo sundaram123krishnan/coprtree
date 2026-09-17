@@ -4,7 +4,6 @@ httpx client singleton tests
 
 import httpx
 import pytest
-
 from coprtree.constants import TIMEOUT
 from coprtree.singleton import get_httpx_client
 

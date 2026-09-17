@@ -8,7 +8,6 @@ from coprtree.chroots import Chroot
 from coprtree.exceptions import InvalidCoprProject, UnsupportedDistribution
 from coprtree.models import BuildEnv
 
-
 # ---------------------------------------------------------------------------
 # copr_project validation
 # ---------------------------------------------------------------------------
@@ -23,19 +22,19 @@ def test_accepts_owner_project_form():
 def test_rejects_project_without_slash():
     """No slash at all raises."""
     with pytest.raises(InvalidCoprProject, match="OWNER/PROJECT"):
-        BuildEnv(["fedora-44-x86_64"], "no-slash-here")
+        _ = BuildEnv(["fedora-44-x86_64"], "no-slash-here")
 
 
 def test_rejects_empty_project():
     """Empty string raises too."""
     with pytest.raises(InvalidCoprProject):
-        BuildEnv(["fedora-44-x86_64"], "")
+        _ = BuildEnv(["fedora-44-x86_64"], "")
 
 
 def test_error_message_names_the_bad_value():
     """The error actually names the value you passed in."""
     with pytest.raises(InvalidCoprProject, match="no-slash-here"):
-        BuildEnv(["fedora-44-x86_64"], "no-slash-here")
+        _ = BuildEnv(["fedora-44-x86_64"], "no-slash-here")
 
 
 @pytest.mark.parametrize(
@@ -47,7 +46,7 @@ def test_error_message_names_the_bad_value():
         "owner/nested/project",  # more than two parts
     ],
 )
-def test_accepts_anything_containing_a_slash(copr_project):
+def test_accepts_anything_containing_a_slash(copr_project: str):
     """The check is shape-only (contains "/"), not a strict two-part parse."""
     env = BuildEnv(["fedora-44-x86_64"], copr_project)
     assert env.copr_project == copr_project
@@ -59,7 +58,7 @@ def test_copr_project_is_validated_before_chroots():
     # before the chroots loop in __init__), so that's the error that
     # should surface
     with pytest.raises(InvalidCoprProject):
-        BuildEnv(["garbage"], "no-slash-here")
+        _ = BuildEnv(["garbage"], "no-slash-here")
 
 
 # ---------------------------------------------------------------------------
@@ -85,10 +84,10 @@ def test_builds_multiple_chroots_in_order():
 def test_propagates_bad_chroot_error():
     """A malformed chroot string isn't swallowed, it raises."""
     with pytest.raises(UnsupportedDistribution):
-        BuildEnv(["garbage"], "owner/project")
+        _ = BuildEnv(["garbage"], "owner/project")
 
 
 def test_propagates_semantically_invalid_chroot_error():
     """A shape-valid but semantically bad chroot raises too."""
     with pytest.raises(UnsupportedDistribution, match="release"):
-        BuildEnv(["fedora-99-x86_64"], "owner/project")
+        _ = BuildEnv(["fedora-99-x86_64"], "owner/project")

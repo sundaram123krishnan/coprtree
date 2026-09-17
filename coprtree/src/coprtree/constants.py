@@ -16,6 +16,15 @@ PACKAGE_VERSIONS_URL = (
 METALINK_URL = "https://mirrors.fedoraproject.org/metalink"
 FEDORA_METALINK = f"{METALINK_URL}?repo=fedora-{{release}}&arch={{arch}}"
 UPDATES_METALINK = f"{METALINK_URL}?repo=updates-released-f{{release}}&arch={{arch}}"
+OPENSUSE_DOWNLOAD = "https://download.opensuse.org"
+_OSS_REPOMD = "/repo/oss/repodata/repomd.xml.metalink"
+OPENSUSE_LEAP_METALINK = (
+    f"{OPENSUSE_DOWNLOAD}/distribution/leap/{{release}}{_OSS_REPOMD}"
+)
+OPENSUSE_TUMBLEWEED_METALINK = f"{OPENSUSE_DOWNLOAD}/tumbleweed{_OSS_REPOMD}"
+OPENSUSE_TUMBLEWEED_PORTS_METALINK = (
+    f"{OPENSUSE_DOWNLOAD}/ports/{{port_arch}}/tumbleweed{_OSS_REPOMD}"
+)
 COPR_BASEURL = "https://download.copr.fedorainfracloud.org/results/{project}/{chroot}/"
 CACHEDIR = "~/.cache/coprtree/{chroot}/{project}"
 
