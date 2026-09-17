@@ -3,7 +3,7 @@
 from typing import ClassVar, override
 
 from ..constants import FEDORA_METALINK, UPDATES_METALINK
-from .base import Chroot, RepoSpec
+from .base import Chroot, ReleaseArch, RepoSpec
 
 
 class Fedora(Chroot):
@@ -40,18 +40,10 @@ class Fedora(Chroot):
         return repos
 
     @staticmethod
-    def _match(chroot: str) -> tuple[str, str] | None:
+    @override
+    def _match(chroot: str) -> ReleaseArch | None:
         parts = chroot.split("-")
         if len(parts) != 3 or parts[0] != "fedora":
             return None
         _, release, arch = parts
         return release, arch
-
-    @classmethod
-    @override
-    def parse(cls, chroot: str) -> Fedora | None:
-        parts = cls._match(chroot)
-        if parts is None:
-            return None
-        release, arch = parts
-        return cls(release, arch)
